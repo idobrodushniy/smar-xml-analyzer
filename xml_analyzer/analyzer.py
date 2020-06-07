@@ -1,3 +1,5 @@
+from typing import List
+
 from lxml import html
 
 from .exceptions import NoMatchesFound
@@ -10,22 +12,19 @@ class XMLAnalyzer:
 
         self.element_id = element_id
 
-    def _parse_xml(self, file_path: str):
-        return html.parse(file_path).getroot()
-
     def get_best_match_path(self) -> str:
         ground_element = self.ground_truth_data.get_element_by_id(self.element_id)
         diff_elements = self.diff_page_data.cssselect(ground_element.tag)
-        ground_element_items = ground_element.items()
-        text = ground_element.text.strip()
+        ground_element_attributes = ground_element.items()
+        ground_element_text = ground_element.text.strip()
 
         max_matches_count = 0
         best_match = None
 
         for el in diff_elements:
             matches_count = self._match_element_with_ground_truth(
-                ground_element_items,
-                text,
+                ground_element_attributes,
+                ground_element_text,
                 el
             )
             if matches_count > max_matches_count:
@@ -37,14 +36,22 @@ class XMLAnalyzer:
 
         return self.diff_page_data.getroottree().getpath(best_match)
 
-    def _match_element_with_ground_truth(self, ground_element_items, text, diff_element):
+    def _parse_xml(self, file_path: str) -> html.HtmlElement:
+        return html.parse(file_path).getroot()
+
+    def _match_element_with_ground_truth(
+            self,
+            ground_element_items: List[html.HtmlElement],
+            ground_element_text: str,
+            diff_element: html.HtmlElement
+    ) -> int:
         matches = 0
 
         for key, value in ground_element_items:
             if value == diff_element.get(key):
                 matches += 1
 
-        if text == diff_element.text:
+        if ground_element_text == diff_element.text:
             matches += 1
 
         return matches
