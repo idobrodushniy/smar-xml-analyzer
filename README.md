@@ -16,9 +16,9 @@
 origin element with an according data from matching elements found by the same tag.
 - If we need the 'fuzzy' match then we can use https://pypi.org/project/python-Levenshtein/ and calculate the distance for
 each value and keep lowest distance as the best match.
-- `cssselect` returns a list of elements, it is not a generator. So if there is a big amount of elements with such tag 
-in file, then it could produce some problems.
-- Unittests have some boilerplate. I guess pytest.mark.parametrize would solve it, but I already have 2 dependencies for 
+- `cssselect` returns a list of elements, it is not a generator. So if there is a large number of elements with such tag 
+in the file, then it could produce some problems.
+- Unit tests have some boilerplate. I guess pytest.mark.parametrize would solve it, but I already have 2 dependencies for 
  such easy task:)
-- Please let me know if I need to remove that code from public github in order to give all other candidates the same 
+- Please let me know if I need to remove that code from public GitHub in order to give all other candidates the same 
 opportunity to solve the exercise in their own way.
