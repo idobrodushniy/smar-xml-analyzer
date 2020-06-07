@@ -1,8 +1,11 @@
+import logging
 from typing import List
 
 from lxml import html
 
 from .exceptions import NoMatchesFound
+
+logger = logging.getLogger(__name__)
 
 
 class XMLAnalyzer:
@@ -33,7 +36,10 @@ class XMLAnalyzer:
 
         if best_match is None:
             raise NoMatchesFound("No suitable matches were found.")
-
+        logger.debug(
+            f"Element {best_match.tag} {best_match} was considered to be the best match"
+            f" because of matching by {max_matches_count} criteria."
+        )
         return self.diff_page_data.getroottree().getpath(best_match)
 
     def _parse_xml(self, file_path: str) -> html.HtmlElement:
